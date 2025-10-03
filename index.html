@@ -1,99 +1,719 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mordecai Bot - Your Collection Companion</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Mordecai Bot</title>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y9G9F61NDM"></script>
+    <!-- Tailwind (CDN) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-Y9G9F61NDM');
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#4f46e5",
+              "background-light": "#f3f4f6",
+              "background-dark": "#0b0d16",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+            },
+          },
+        },
+      };
     </script>
-    
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #100f1c 0%, #0c0b1e 50%, #1a192f 100%);
-            overflow: hidden;
-            position: relative;
-        }
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-        .content-container {
-            position: relative;
-            z-index: 1;
-        }
-        .action-button {
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 15px 0 rgba(116, 79, 168, 0.4);
-        }
-        .action-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px 0 rgba(116, 79, 168, 0.6);
-        }
+      :root {
+        color-scheme: light;
+      }
+      .dark {
+        color-scheme: dark;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      .cards-grid {
+        position: fixed;
+        top: -1950px; /* más arriba todavía */
+        left: -300px; /* más a la izquierda */
+        width: 160%; /* todavía más ancha */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 200px;
+        gap: 20px;
+        transform: rotate(30deg);
+        transform-origin: top left;
+        z-index: 0;
+      }
+
+      .cards-grid div {
+        width: 100%;
+        height: 100%;
+        border-radius: 0.5rem;
+        background-size: cover;
+        background-position: center;
+      }
+
+      footer {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px !important;
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        z-index: 20;
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      /* Colores dinámicos según modo */
+      footer {
+        background: rgba(255, 255, 255, 0.6); /* claro */
+        color: #111827;
+      }
+      .dark footer {
+        background: rgba(15, 15, 20, 0.85); /* oscuro */
+        color: #f3f4f6;
+      }
     </style>
-</head>
-<body class="text-white">
+  </head>
 
-    <div id="particles-js"></div>
+  <body
+    class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 min-h-screen flex flex-col relative"
+  >
+    <!-- Fondo de cartas -->
+    <div class="cards-grid" id="cards-grid"></div>
 
-    <div class="content-container flex flex-col items-center justify-center min-h-screen p-4">
-        
-        <div class="mb-6">
-            <img src="https://raw.githubusercontent.com/m0rd3caii/morde_cards/refs/heads/main/cartas2/mordecai.jpg" alt="Logo de Mordecai Bot" class="rounded-full w-40 h-40 object-cover border-4 border-purple-400/50 shadow-lg">
+    <!-- Contenido principal -->
+    <div class="flex flex-col md:flex-row flex-grow relative z-10">
+      <aside
+        class="flex flex-col items-center justify-center text-center w-full md:w-5/12 lg:w-4/12 p-8 
+              bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm rounded-xl m-4 shadow-xl text-lg"
+      >
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-28 h-28 rounded-full overflow-hidden shadow-xl">
+            <img src="https://raw.githubusercontent.com/m0rd3caii/morde_cards/refs/heads/main/cartas2/mordecai.jpg" alt="Logo de Mordecai Bot" class="w-full h-full object-cover"/>
+          </div>
+          <h1 class="text-4xl font-bold mt-2">Mordecai Bot</h1>
+          <p class="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-8">
+            Tu asistente de servidor y entretenimiento
+          </p>
+          <nav class="w-full max-w-xs space-y-3">
+            <div class="w-full max-w-xs md:max-w-sm space-y-4">
+                <a href="/support" class="action-button block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg text-lg">
+                    Support Server
+                </a>
+                <a href="/invite" class="action-button block w-full text-center bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg text-lg">
+                    Invite Mordecai to Your Server
+                </a>
+            </div>
+            
+            <div class="mt-12 w-full max-w-xs md:max-w-sm">
+                <a href="https://top.gg/bot/1107359432934957167" target="_blank">
+                    <img src="https://top.gg/api/widget/1107359432934957167.svg" alt="Estado de Mordecai Bot en Top.gg" class="rounded-lg shadow-md w-full">
+                </a>
+            </div>
+          </nav>
         </div>
-        
-        <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center">
-            Mordecai Bot
-        </h1>
-
-        <div class="w-full max-w-xs md:max-w-sm space-y-4">
-            <a href="/support" class="action-button block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg text-lg">
-                Support Server
-            </a>
-            <a href="/invite" class="action-button block w-full text-center bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg text-lg">
-                Invite Mordecai to Your Server
-            </a>
-        </div>
-        
-        <div class="mt-12 w-full max-w-xs md:max-w-sm">
-            <a href="https://top.gg/bot/1107359432934957167" target="_blank">
-                <img src="https://top.gg/api/widget/1107359432934957167.svg" alt="Estado de Mordecai Bot en Top.gg" class="rounded-lg shadow-md w-full">
-            </a>
-        </div>
-
-        <footer class="mt-16 text-center text-gray-400 text-sm">
-            <p>&copy; 2024 mordecai.fun - All rights reserved.</p>
-            <p class="mt-1">
-                <a href="https://mordecai.fun/Terms_of_Service.html" class="hover:text-white">Terms of Service</a> &middot; 
-                <a href="https://mordecai.fun/privacy_policy.html" class="hover:text-white">Privacy Policy</a>
-            </p>
-        </footer>
+      </aside>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- Footer -->
+    <footer class="text-sm relative z-10">
+      <div class="w-full sm:w-1/3 flex justify-start">
+        <button
+          id="theme-toggle"
+          aria-label="Alternar modo oscuro"
+          title="Alternar modo oscuro"
+          class="inline-flex items-center justify-center p-2 rounded-md focus:ring-2 focus:ring-offset-1 bg-white/60 dark:bg-black/30"
+        >
+          <svg
+            id="icon-sun"
+            class="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <svg
+            id="icon-moon"
+            class="w-5 h-5 hidden"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="w-full sm:w-1/3 flex justify-center mt-3 sm:mt-0">
+        <nav aria-label="Enlaces de pie" class="flex gap-4">
+          <a
+            href="https://mordecai.fun/Terms_of_Service.html"
+            class="hover:underline"
+            >Terms of Service</a
+          >
+          <span class="text-gray-400 dark:text-gray-500">·</span>
+          <a
+            href="https://mordecai.fun/privacy_policy.html"
+            class="hover:underline"
+            >Privacy Policy</a
+          >
+        </nav>
+      </div>
+
+      <div class="w-full sm:w-1/3 flex justify-end mt-3 sm:mt-0">
+        <p class="text-right">
+          &copy; 2025 mordecai.fun — All rights reserved.
+        </p>
+      </div>
+    </footer>
+
     <script>
-        particlesJS('particles-js', {
-            "particles": { "number": { "value": 80, "density": { "enable": true, "value_area": 800 }}, "color": { "value": "#ffffff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false }}, "size": { "value": 3, "random": true }, "line_linked": { "enable": true, "distance": 150, "color": "#4a5568", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 2, "direction": "none", "out_mode": "out" }},
-            "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 140, "line_opacity": 1 }, "push": { "particles_nb": 4 }}},
-            "retina_detect": true
-        });
+      // Lista de cartas
+      const cartas = [
+        "707.png",
+        "AARON.png",
+        "AARON_HOTCHNER.png",
+        "AARON_LYCAN.png",
+        "ADAM_HAZ.png",
+        "ADA_WONG.png",
+        "ADELA.png",
+        "AEDA.png",
+        "AEDA_CHRISTMAS.png",
+        "AETHER.png",
+        "AKANE_YANAGI.png",
+        "AKIHIKO_NIREI.png",
+        "AKINORI.png",
+        "AKIRA_MADO.png",
+        "AKIRA_TOGA.png",
+        "AKURA-OU.png",
+        "ALASTOR.png",
+        "ALBERT_WESKER.png",
+        "ALECSfather.png",
+        "ALEKSANDER_veil.png",
+        "ALICE.png",
+        "ALICE_NAKIRI.png",
+        "ALL_MIGHT.png",
+        "AMAYO.png",
+        "ANN_TAKAMAKI.png",
+        "ANYA.png",
+        "ANYA_christmas.png",
+        "AOBA_SERAGAKI.png",
+        "AOI_TODO.png",
+        "APHMAU.png",
+        "ARAKARMAN.png",
+        "ARALILA.png",
+        "ARAMANI.png",
+        "ARAMINALI.png",
+        "ARATA_KAIZAKI.png",
+        "ARBITRO.png",
+        "ARIA.png",
+        "ARLAN.png",
+        "ARLECCHINO.png",
+        "ARTEM_WING.png",
+        "ASH.png",
+        "AKAZA.png",
+        "ASTA.png",
+        "ASTARION.png",
+        "ASTA_CLOVER.png",
+        "ASTOLFO.png",
+        "ASTRID.png",
+        "AYATO_KIRISHIMA.png",
+        "AYUMU.png",
+        "AZAMI.png",
+        "AbdulAli_S1.png",
+        "AngelaMoss.png",
+        "AoiKanzaki.png",
+        "BAAL_genshin.png",
+        "BAEK_YOON-HO.png",
+        "BANG_CHAN.png",
+        "BEASTMONARCH.png",
+        "BEAST_TITAN.png",
+        "BELLHYDRA.png",
+        "BENIMARUSHINMON.png",
+        "BENSON.png",
+        "BERCOULI.png",
+        "BOOTHILL.png",
+        "BRAZBLOOD.png",
+        "BROOK.png",
+        "BUGGY.png",
+        "BYAKUYA_TOGAMI.png",
+        "Baizhi.png",
+        "Baizhi_christmas.png",
+        "Bepo.png",
+        "Blade_Golden.png",
+        "CADIS_ETRAMA.png",
+        "CAELUS.png",
+        "CAITLYNarcane.png",
+        "CALCIFER.png",
+        "CALEB.png",
+        "CALEB2.png",
+        "CARROT.png",
+        "CELESTIA_LUDENBERG.png",
+        "CELESTINE_TAYLOR.png",
+        "CHAHAE-IN.png",
+        "CHAM.png",
+        "CHANCE_date.png",
+        "CHANGBIN.png",
+        "CHARLES_LECLERC.png",
+        "CHIAKI_NANAMI.png",
+        "CHIEFSwife.png",
+        "CHIZURU_HISHIRO.png",
+        "CHOSO.png",
+        "CHRIS_REDFIELD.png",
+        "CIEL_PHANTOMHIVE.png",
+        "CINDERELLA.png",
+        "CLAIRE_REDFIELD.png",
+        "CLARICE.png",
+        "CLAWDEEN_WOLF.png",
+        "CLEAR.png",
+        "CLIFFORD_CHAPIN.png",
+        "CLOUD_STRIFE.png",
+        "CONNIE_SPRINGER.png",
+        "COQUELIC.png",
+        "CYNTHIA.png",
+        "Caelus_Christmas.png",
+        "ChristaLenz.png",
+        "DABI_MHA.png",
+        "DAESUNG.png",
+        "DAIKI.png",
+        "DAN_HENG.png",
+        "DARKSNOW.png",
+        "DEATHGUN.png",
+        "DEMONKNIGHT.png",
+        "DHALIS.png",
+        "DIANE_seven.png",
+        "DIDDY.png",
+        "DIMOREEVES.png",
+        "DIRK_DEVERAUX.png",
+        "DITAness.png",
+        "DOCTORBELZER.png",
+        "DOFLAMINGO.png",
+        "DORAZOU.png",
+        "DORIAN_date.png",
+        "DRACULAURA.png",
+        "DRAG.png",
+        "DRED.png",
+        "DUSTINHENDERSON.png",
+        "David_Rossi.png",
+        "DawnsPiplup.png",
+        "EDDIESOUL.png",
+        "EIJIROU_KIRISHIMA.png",
+        "EIN.png",
+        "ELEVEN.png",
+        "ELIZABETH_LIONES.png",
+        "EMILYPRENTISS.png",
+        "EMINA.png",
+        "ENEL.png",
+        "ERINA_NAKIRI.png",
+        "ERIPIYO.png",
+        "ERWIN.png",
+        "ESCANOR.png",
+        "ETO.png",
+        "EUGENE_KOREKISHI.png",
+        "EUGEO.png",
+        "EdwardAlderson.png",
+        "FAFNIR.png",
+        "FANNIE.png",
+        "FIN.png",
+        "FLAREFRUIT.png",
+        "FRANKENSTEIN.png",
+        "FRANKIE_STEIN.png",
+        "FREDERICA.png",
+        "FRIEREN.png",
+        "FURINA_gen.png",
+        "FUTABA_SAKURA.png",
+        "FUYUMIYANAGI.png",
+        "Fake_Luffy.png",
+        "Fubukisenran.png",
+        "GABE_NEWELL.png",
+        "GABI.png",
+        "GANYU_gen.png",
+        "GARROTH.png",
+        "GAWAIN.png",
+        "GDRAGONbigbang.png",
+        "GENGAR.png",
+        "GENGAR_promo24.png",
+        "GHOULIA_YELPS.png",
+        "GILGAMESH.png",
+        "GIYU.png",
+        "GIYU_TOMIOKA_2d.png",
+        "GIYU_TOMIOKA_GOLD.png",
+        "GIYU_TOMIOKA_NORM2d.png",
+        "GIYU_promo24.png",
+        "GLADIOLUSAMICITIA.png",
+        "GOGUN-HEE.png",
+        "GOJO.png",
+        "GOL_D_ROGER.png",
+        "GORO_AKECHI.png",
+        "GREATuncle.png",
+        "GRENINJA.png",
+        "GRETA.png",
+        "GUINAIFEN.png",
+        "GUMGUMfruit.png",
+        "GUSTAV.png",
+        "HAIDO.png",
+        "HAISE_SASAKI.png",
+        "HAJIME_UMEMIYA.png",
+        "HANAKO_TOILET.png",
+        "HANSON_COLLINS.png",
+        "HANYA.png",
+        "HAN_SHINWOO.png",
+        "HARPER.png",
+        "HARRY_GRANT.png",
+        "HARUCHIYOSANZU.png",
+        "HARUCHIYOSANZU_christmas.png",
+        "HARUCHIYOSANZU_promo24.png",
+        "HARUKA_SAKURA.png",
+        "HARUTA.png",
+        "HARU_OKUMURA.png",
+        "HA_ SOOYOUNG.png",
+        "HECTOR_Date.png",
+        "HERTA.png",
+        "HIBIKI.png",
+        "HIDEYOSHI_NAGACHIKA.png",
+        "HIMI.png",
+        "HIMIKO_TOGA.png",
+        "HIMMEL.png",
+        "HINATA_HYUUGA.png",
+        "HINO.png",
+        "HIRODarlin.png",
+        "HISOKA.png",
+        "HONNOJI.png",
+        "HONOKA_SAWADA.png",
+        "HOOK.png",
+        "HOWARD_SYTER.png",
+        "HOWL.png",
+        "HOWL_S_CASTLE.png",
+        "HU_TAO.png",
+        "HYUNJIN.png",
+        "Hiragiyatsuse.png",
+        "Hiragiyatsuse_promo24.png",
+        "IAN.png",
+        "IBUKI_MIODA.png",
+        "ICEBEAR.png",
+        "ICHIGO_Darling.png",
+        "IGNISSCIENTIA.png",
+        "IGRIS_Leveling.png",
+        "IKUMI_MITO.png",
+        "INOSUKE.png",
+        "IN_Stray.png",
+        "IRONMOUSE.png",
+        "ISHIDATE.png",
+        "ISHOWSPEED.png",
+        "ISHTAR.png",
+        "IZ.png",
+        "IZUMI_MIYAMURA.png",
+        "Itachi.png",
+        "Itachi_promo2024.png",
+        "JAHYEON_JO.png",
+        "JAMES.png",
+        "JASKIER.png",
+        "JASON_GIDEON.png",
+        "JEANADARCAND.png",
+        "JENNIFER_JAREAU.png",
+        "JESTER_LAVORRE.png",
+        "JIMHOPPER.png",
+        "JOEY_BATEY.png",
+        "JOEY_BATEY_v2.png",
+        "JOE_KEERY.png",
+        "JOE_KEERY2.png",
+        "JOHN_PRICE.png",
+        "JOKER_PERSONA5animation.png",
+        "JONATHANBYERS.png",
+        "JOUICHIROU_YUKIHIRA.png",
+        "JOYCEBYERS.png",
+        "JUMIN_HAN.png",
+        "JUNG_HEEWON.png",
+        "JUNKO_ENOSHIMA.png",
+        "JURGEN.png",
+        "JUSTIN_BRINER.png",
+        "JUUZOU_SUZUYA.png",
+        "JUZO.png",
+        "Jewelry_Bonney.png",
+        "Jinbe.png",
+        "JudoHead.png",
+        "KACHOU.png",
+        "KAFKA.png",
+        "KAGUYA.png",
+        "KAIGAKU.png",
+        "KAKASHI_HATAKE.png",
+        "KANA.png",
+        "KANAEKOCHOU.png",
+        "KANG_TAE-SHIK.png",
+        "KANJI.png",
+        "KAORU_KANZAKI.png",
+        "KASUMI.png",
+        "KATAKURI_CHARLOTTE.png",
+        "KATSUKI_BAKUGO.png",
+        "KAWAII_CHAN.png",
+        "KAZAN.png",
+        "KAZUOMI_OHGA.png",
+        "KAZUTERU.png",
+        "KECHIZU.png",
+        "KEEGAN_RUSS.png",
+        "KEIJI.png",
+        "KEISUKE.png",
+        "KEISUKE_BAJI.png",
+        "KEN.png",
+        "KENMA.png",
+        "KEN_KANEKI.png",
+        "KIDO.png",
+        "KIDO_christmas.png",
+        "KIM.png",
+        "KIMEUIHYUN.png",
+        "KIMSEOK-JIN.png",
+        "KIMSEOK-JIN_christmas.png",
+        "KIM_DOKJA.png",
+        "KIM_WOO_JIN.png",
+        "KIRIKO.png",
+        "KISARA.png",
+        "KISUKE_URAHARA.png",
+        "KITZ.png",
+        "KIYOTAKAAYANOKOUJI.png",
+        "KOKICHI_OUMA.png",
+        "KOKUSHIBOU.png",
+        "KOTARO.png",
+        "KOTARO_TAMON.png",
+        "KOUJAKU.png",
+        "KOYUKI.png",
+        "KURAHASHI.png",
+        "KURAMA_SHINJIROU.png",
+        "KUROMU.png",
+        "KYOUKA_JIROU.png",
+        "KYOUKO_HORI.png",
+        "KYOUKO_KIRIGIRI.png",
+        "Kai_Cenat.png",
+        "KangSaeByeok_S1.png",
+        "KeiKaruizawa.png",
+        "Kiku.png",
+        "KimEuiyoung.png",
+        "KimNamjoon.png",
+        "KimNamjoon_CHRISTMAS.png",
+        "L.png",
+        "LABIATA.png",
+        "LACKEY.png",
+        "LACKEY1.png",
+        "LAKE.png",
+        "LANGLEY.png",
+        "LATIAS.png",
+        "LEAFA.png",
+        "LEE_GILYOUNG.png",
+        "LEE_HYUNSUNG.png",
+        "LEE_JIHYE.png",
+        "LEE_KNOW.png",
+        "LEWIS_HAMILTON.png",
+        "LIAM_LAWSON.png",
+        "LISBETH.png",
+        "LOLITE.png",
+        "LOUISE.png",
+        "LUCARIO.png",
+        "LUCASSINCLAIR.png",
+        "LUCIJA.png",
+        "LUCINDA.png",
+        "LUDMILLA.png",
+        "LUFFY.png",
+        "LUFFY_halloween.png",
+        "LUKA.png",
+        "LUKE_PEARCE.png",
+        "LUNA.png",
+        "LYNX.png",
+        "LYNX_CHRISTMAS.png",
+        "Lemonadebeta.png",
+        "Lemonadebeta_christmas.png",
+        "LeonScottKen.png",
+        "Leprechaun.png",
+        "Linlin_Charlotte.png",
+        "M-21.png",
+        "MAHITO.png",
+        "MAI.png",
+        "MAINA_ICHII.png",
+        "MAKOTO.png",
+        "MAKOTO_NIIJIMA.png",
+        "MANJIRO.png",
+        "MAPLE.png",
+        "MARAIC_JUSCHEN.png",
+        "MARIUS_VON_HAGEN.png",
+        "MARKUS.png",
+        "MARLOWE.png",
+        "MARYSAOTOME.png",
+        "MARYSAOTOME_christmas.png",
+        "MASH.png",
+        "MATEO_date.png",
+        "MATTHEW_MERCER.png",
+        "MAXMAYFIELD.png",
+        "MAX_VERSTAPPEN.png",
+        "MAYURIKUROTSUCHI.png",
+        "MAYURIKUROTSUCHI_christmas.png",
+        "MEGUMI_TADOKORO.png",
+        "MEGURUBACHIRA.png",
+        "MEIMEI_v2.png",
+        "MELIODAS.png",
+        "MICHIRUTSUKI.png",
+        "MIDNIGHT.png",
+        "MIHO.png",
+        "MII.png",
+        "MIKAN_TSUMIKI.png",
+        "MIKEWHEELER.png",
+        "MILES.png",
+        "MILIEUS.png",
+        "MIRIO_TOGATA.png",
+        "MIRKO_mha.png",
+        "MISERY.png",
+        "MISHA.png",
+        "MITABI.png",
+        "MITABI_christmas.png",
+        "MIU_IRUMA.png",
+        "MIZUKI.png",
+        "MOGARI_SHISHIKU.png",
+        "MOKNACH.png",
+        "MONARCHOFPLAG.png",
+        "MONOKUMA.png",
+        "MORDECAI.png",
+        "MORGANA_persona.png",
+        "MOTOKI.png",
+        "MOTOMI.png",
+        "MUKADE.png",
+        "MUSCLEMAN.png",
+        "MYSHA.png",
+        "N.png",
+        "NAGISEISHIRO.png",
+        "NAGITO_KOMAEDAv2.png",
+        "NAGITO_KOMAEDE.png",
+        "NANAMI_MOMOZ.png",
+        "NANCYWHEELER.png",
+        "NATASHA.png",
+        "NATSUKO.png",
+        "NEFU.png",
+        "NEIGAN.png",
+        "NEITO_MONOMA.png",
+        "NEJIRE_HADO.png",
+        "NEKOBA.png",
+        "NENE_YASHIRO.png",
+        "NEWSREPORTER.png",
+        "NEZUKO_KAMADO_gold.png",
+        "NICOLE_PREMIER.png",
+        "NIGUN.png",
+        "NIMURA_FURUTA.png",
+        "NISHIO_NISHIKI.png",
+        "NOBARA_KUGISAKI.png",
+        "NOBUKO.png",
+        "NOBUNAGA.png",
+        "NOCTISLUCISCAELUM.png",
+        "NOELLE_SILVA.png",
+        "NOIZ.png",
+        "NORIMUNE.png",
+        "NUMBY.png",
+        "N_promo2024.png",
+        "NezukoKamado.png",
+        "NezukoKamado_Normal.png",
+        "NezukoKamado_promo.png"
+      ];
+
+      const grid = document.getElementById("cards-grid");
+      const baseUrl =
+        "https://raw.githubusercontent.com/m0rd3caii/morde_cards/main/cartas2/";
+
+      cartas.forEach((nombre) => {
+        const div = document.createElement("div");
+        div.style.backgroundImage = `url('${baseUrl}${nombre}')`;
+        grid.appendChild(div);
+      });
     </script>
 
-</body>
+    <script>
+      // Toggle de tema
+      (function () {
+        const btn = document.getElementById("theme-toggle");
+        const iconSun = document.getElementById("icon-sun");
+        const iconMoon = document.getElementById("icon-moon");
+
+        function setIcons(isDark) {
+          if (isDark) {
+            iconSun.classList.add("hidden");
+            iconMoon.classList.remove("hidden");
+          } else {
+            iconMoon.classList.add("hidden");
+            iconSun.classList.remove("hidden");
+          }
+        }
+
+        function applyTheme(isDark) {
+          if (isDark) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+          setIcons(isDark);
+        }
+
+        const saved = localStorage.getItem("mordecai-theme");
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = saved ? saved === "dark" : prefersDark;
+        applyTheme(isDark);
+
+        btn.addEventListener("click", () => {
+          const nowDark = document.documentElement.classList.toggle("dark");
+          localStorage.setItem("mordecai-theme", nowDark ? "dark" : "light");
+          setIcons(nowDark);
+        });
+
+        window.addEventListener("keydown", (e) => {
+          const active = document.activeElement;
+          const isTyping =
+            active &&
+            (active.tagName === "INPUT" ||
+              active.tagName === "TEXTAREA" ||
+              active.isContentEditable);
+          if (!isTyping && (e.key === "T" || e.key === "t")) {
+            btn.click();
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>
-
-
